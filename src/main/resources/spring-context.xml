@@ -4,11 +4,12 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="personDao" class="spring.dao.PersonDaoSimple">
+    <bean id="anketaDao" class="spring.dao.AnketaDaoSimple">
+        <constructor-arg name="filePath" value="src/main/resources/StudentAnketa.csv"/>
     </bean>
 
-    <bean id="personService" class="spring.service.PersonServiceImpl">
-        <constructor-arg name="dao" ref="personDao"/>
+    <bean id="personService" class="spring.service.AnketaServiceImpl">
+        <constructor-arg name="dao" ref="anketaDao"/>
     </bean>
 
 </beans>
