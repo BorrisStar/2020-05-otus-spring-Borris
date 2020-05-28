@@ -8,7 +8,7 @@
         <constructor-arg name="filePath" value="src/main/resources/StudentAnketa.csv"/>
     </bean>
 
-    <bean id="personService" class="spring.service.AnketaServiceImpl">
+    <bean id="anketaService" class="spring.service.AnketaServiceImpl">
         <constructor-arg name="dao" ref="anketaDao"/>
     </bean>
 

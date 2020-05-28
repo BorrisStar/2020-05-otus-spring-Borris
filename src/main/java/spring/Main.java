@@ -18,6 +18,7 @@ public class Main {
     public static void main(String[] args) {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
         AnketaService anketaService = context.getBean(AnketaService.class);
+
         System.out.println("Anketa for Students:");
         for (Question questionAndAnswer : anketaService.getAll()) {
             for (String str : questionAndAnswer.getQuestionAndAnswers()) {
