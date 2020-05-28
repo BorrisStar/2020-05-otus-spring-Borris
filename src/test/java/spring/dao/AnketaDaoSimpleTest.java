@@ -8,6 +8,7 @@ import spring.service.AnketaService;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AnketaDaoSimpleTest {
     ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
@@ -15,10 +16,15 @@ class AnketaDaoSimpleTest {
 
 
     @Test
-    void findByNumber() {
+    void correctFindByNumber() {
         List<String> list = List.of("What course do you study?", "1) 1", "2) 2", "3) 3", "4) 4");
         Question question = new Question(list);
         assertEquals(question.getQuestionAndAnswers(), anketaService.findByNumber(0).getQuestionAndAnswers());
+    }
+
+    @Test()
+    void notCorrectNumber_indexOutOfBounds() {
+        assertThrows(IndexOutOfBoundsException.class, () -> anketaService.findByNumber(7));
     }
 
     @Test
