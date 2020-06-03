@@ -1,8 +1,13 @@
 package spring.dao;
 
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Repository;
 import spring.domain.Anketa;
 import spring.domain.Question;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,15 +15,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+@Data
+@Repository
+@PropertySource("classpath:application.properties")
 public class AnketaDaoSimple implements AnketaDao {
-    private final Anketa anketa;
 
-    public AnketaDaoSimple(String filePath) throws IOException {
+    @Value("${filePath}")
+    private String filePath;
+
+    private Anketa anketa;
+
+    @PostConstruct
+    private void init() throws IOException {
+
         List<Question> questions = new ArrayList<>();
 
         Path path = Paths.get(filePath);
         Scanner scanner = new Scanner(path);
-        //scanner.useDelimiter(System.getProperty("line.separator"));
 
         String scanResult;
         List<String> list = new ArrayList<>();
@@ -53,5 +66,4 @@ public class AnketaDaoSimple implements AnketaDao {
     public List<Question> getAll() {
         return anketa.getQuestions();
     }
-
 }
