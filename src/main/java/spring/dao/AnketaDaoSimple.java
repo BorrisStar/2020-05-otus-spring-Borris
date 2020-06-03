@@ -6,11 +6,10 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Repository;
 import spring.domain.Anketa;
 import spring.domain.Question;
+import spring.service.ScannerService;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -24,17 +23,19 @@ public class AnketaDaoSimple implements AnketaDao {
     private String filePath;
 
     private Anketa anketa;
+    private ScannerService scannerService;
+
+    public AnketaDaoSimple(Anketa anketa, ScannerService scannerService) {
+        this.anketa = anketa;
+        this.scannerService = scannerService;
+    }
 
     @PostConstruct
     private void init() throws IOException {
-
-        List<Question> questions = new ArrayList<>();
-
-        Path path = Paths.get(filePath);
-        Scanner scanner = new Scanner(path);
-
+        Scanner scanner = scannerService.getScannerWithPath(filePath);
         String scanResult;
         List<String> list = new ArrayList<>();
+        List<Question> questions = new ArrayList<>() ;
 
         while (!(scanResult = scanner.nextLine()).equals(".")) {
             if (!scanResult.equals(";")) {

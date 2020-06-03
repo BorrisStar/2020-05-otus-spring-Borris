@@ -1,7 +1,8 @@
 package spring.dao;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import spring.Main;
 import spring.domain.Question;
 import spring.service.AnketaService;
 
@@ -11,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class AnketaDaoSimpleTest {
-    ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
+    AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
     AnketaService anketaService = context.getBean(AnketaService.class);
 
 

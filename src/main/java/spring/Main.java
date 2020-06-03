@@ -2,27 +2,20 @@ package spring;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import spring.domain.Question;
-import spring.service.AnketaService;
+import spring.service.StudentSurveyService;
 
+import java.io.IOException;
 
-@Configuration
+//Программа должна спросить у пользователя фамилию и имя, спросить 5 вопросов из CSV-файла и вывести результат тестирования.
 @ComponentScan
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
 
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(Main.class);
 
-        AnketaService anketaService = context.getBean(AnketaService.class);
+        StudentSurveyService surveyService = context.getBean(StudentSurveyService.class);
 
-        System.out.println("Anketa for Students:");
-        for (Question questionAndAnswer : anketaService.getAll()) {
-            for (String str : questionAndAnswer.getQuestionAndAnswers()) {
-                System.out.println(str);
-            }
-            System.out.println();
-        }
+        surveyService.questioning();
     }
 }
