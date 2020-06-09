@@ -4,31 +4,37 @@ import org.springframework.stereotype.Service;
 import spring.domain.Question;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 @Service
 public class StudentSurveyService {
 
     private final AnketaServiceImpl anketaService;
-    private final ScannerService scannerService;
 
-    public StudentSurveyService(
-            AnketaServiceImpl anketaService,
-            ScannerService scannerService) {
+    public StudentSurveyService(AnketaServiceImpl anketaService) {
         this.anketaService = anketaService;
-        this.scannerService = scannerService;
     }
 
-    public void questioning() throws IOException {
-        Scanner in = scannerService.getScannerIn();
-        int[] answers = new int[6];
-        int answerCount = 0;
+    public void questioning(Scanner in) throws IOException {
+
         System.out.println("Anketa for Hogwarts students:");
 
-        System.out.println("Введите вашу фамилию: ");
-        String family = in.nextLine();
-        System.out.println("Введите ваше имя: ");
-        String name = in.nextLine();
+        String family = getFIO(in, "Введите вашу фамилию: ");
+
+        String name = getFIO(in, "Введите ваше имя: ");
+
+        List<Integer> answers = getAnswers(in);
+
+        getSurveyResult(answers, family, name);
+
+        System.out.println("Спасибо за участие в тестировании!");
+    }
+
+    private List<Integer> getAnswers(Scanner in) {
+
+        List<Integer> answers = new ArrayList<>();
 
         for (
                 Question questionAndAnswer : anketaService.getAll()) {
@@ -42,7 +48,7 @@ public class StudentSurveyService {
             if (in.hasNextInt()) {
                 int result = in.nextInt();
                 if (result >= 1 && result <= 4) {
-                    answers[answerCount++] = result;
+                    answers.add(result);
                 } else {
                     throw new IllegalArgumentException("Неверный диапазон числа");
                 }
@@ -53,13 +59,20 @@ public class StudentSurveyService {
         }
         in.close();
 
+        return answers;
+    }
+
+    private String getFIO(Scanner in, String s) {
+        System.out.println(s);
+        return in.nextLine();
+    }
+
+    private void getSurveyResult(List<Integer> answers, String family, String name) {
         System.out.println();
         System.out.println("ФИО:" + family + " " + name);
         System.out.println("Результаты теста:");
-
         for (int count : answers) {
-            System.out.println(++count + ". " + answers[count - 1]);
+            System.out.println(++count + ". " + answers.get(count - 1));
         }
-        System.out.println("Спасибо за участие в тестировании!");
     }
 }

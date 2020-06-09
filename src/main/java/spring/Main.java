@@ -2,6 +2,7 @@ package spring;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import spring.service.ScannerService;
 import spring.service.StudentSurveyService;
 
 import java.io.IOException;
@@ -16,6 +17,6 @@ public class Main {
 
         StudentSurveyService surveyService = context.getBean(StudentSurveyService.class);
 
-        surveyService.questioning();
+        surveyService.questioning(new ScannerService().getScannerIn());
     }
 }
