@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 @Service
 public class ScannerService {
+   private final String encoding = System.getProperty("console.encoding", "utf-8");
 
     public Scanner getScannerWithPath(String filePath) throws IOException {
         Path path = Paths.get(filePath);
@@ -16,7 +17,7 @@ public class ScannerService {
     }
 
     public Scanner getScannerIn() throws IOException {
-        return new Scanner(System.in);
+        return new Scanner(System.in, encoding);
     }
 
 }
