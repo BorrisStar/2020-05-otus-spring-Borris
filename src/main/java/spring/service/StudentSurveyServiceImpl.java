@@ -1,5 +1,6 @@
 package spring.service;
 
+import org.springframework.context.MessageSource;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import spring.domain.Question;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 @Service
@@ -16,10 +18,13 @@ public class StudentSurveyServiceImpl implements StudentSurveyService{
 
     private final AnketaServiceImpl anketaService;
     private final ScannerService scannerService;
+    private final MessageSource source;
+    private final Locale locale = Locale.forLanguageTag("ru-Ru");
 
-    public StudentSurveyServiceImpl(AnketaServiceImpl anketaService, ScannerService scannerService) {
+    public StudentSurveyServiceImpl(AnketaServiceImpl anketaService, ScannerService scannerService, MessageSource messageSource) {
         this.anketaService = anketaService;
         this.scannerService = scannerService;
+        this.source = messageSource;
     }
 
     @Override
@@ -29,15 +34,15 @@ public class StudentSurveyServiceImpl implements StudentSurveyService{
 
         System.out.println("Anketa for Hogwarts students:");
 
-        String family = getFIO(in, "Введите вашу фамилию: ");
+        String family = getFIO(in, "InputSecondName");
 
-        String name = getFIO(in, "Введите ваше имя: ");
+        String name = getFIO(in, "InputFirstName");
 
         List<Integer> answers = getAnswers(in);
 
         getSurveyResult(answers, family, name);
 
-        System.out.println("Спасибо за участие в тестировании!");
+        System.out.println(source.getMessage("ThankYou", null, locale));
     }
 
     @Override
@@ -51,7 +56,7 @@ public class StudentSurveyServiceImpl implements StudentSurveyService{
                 System.out.println(str);
             }
             System.out.println();
-            System.out.println("Введите номер вашего ответа (число от 1 до 4): ");
+            System.out.println(source.getMessage("InputNumber", null, locale));
 
             //Простая проверка
             if (in.hasNextInt()) {
@@ -73,15 +78,16 @@ public class StudentSurveyServiceImpl implements StudentSurveyService{
 
     @Override
     public String getFIO(Scanner in, String s) {
-        System.out.println(s);
+        System.out.println(source.getMessage(s, null, locale));
         return in.nextLine();
     }
 
     @Override
     public void getSurveyResult(List<Integer> answers, String family, String name) {
         System.out.println();
-        System.out.println("ФИО:" + family + " " + name);
-        System.out.println("Результаты теста:");
+
+        System.out.println(source.getMessage("FIO", null, locale) + family + " " + name);
+        System.out.println(source.getMessage("TestResult", null, locale));
         for (int count : answers) {
             System.out.println(++count + ". " + answers.get(count - 1));
         }
